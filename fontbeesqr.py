@@ -1,7 +1,15 @@
 import qrcode
+import os
 from PIL import Image
 
 def generate_qr(url, filename="qrcode.png"):
+    """
+    Generates a QR code from the given URL and saves it as an image file.
+
+    Parameters:
+    url (str): The URL to encode in the QR code.
+    filename (str): The name of the file to save the QR code image.
+    """
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -19,10 +27,15 @@ def generate_qr(url, filename="qrcode.png"):
     img.show()
 
 def display_fontbees_name():
-    # Display "FontBees" in green color with dash style
+    """
+    Displays the company name "FontBees" in green color with a stylized format.
+    """
     print("\033[92m--==[ FontBees ]==--\033[0m")  # \033[92m is the ANSI escape code for green
 
 def main():
+    """
+    Main function that runs the QR code generator tool.
+    """
     display_fontbees_name()  # Display "FontBees" when the tool is activated
 
     # Always ask for the URL
