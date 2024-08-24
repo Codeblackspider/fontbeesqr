@@ -1,6 +1,7 @@
 import qrcode
-import os
 from PIL import Image
+from pyfiglet import figlet_format
+from colored import fore, style
 
 def generate_qr(url, filename="qrcode.png"):
     """
@@ -26,17 +27,41 @@ def generate_qr(url, filename="qrcode.png"):
     # Display the QR Code
     img.show()
 
+def rgb_to_ansi256(r, g, b):
+    return 16 + 36 * (r // 51) + 6 * (g // 51) + (b // 51)
+
+def get_gradient_color(start_color, end_color, steps, step):
+    r1, g1, b1 = start_color
+    r2, g2, b2 = end_color
+    r = int(r1 + (r2 - r1) * step / steps)
+    g = int(g1 + (g2 - g1) * step / steps)
+    b = int(b1 + (b2 - b1) * step / steps)
+    return (r, g, b)
+
+def gradient_text(text, start_color, end_color, steps):
+    gradient_text = ""
+    for i in range(steps):
+        color = get_gradient_color(start_color, end_color, steps, i)
+        ansi_color = rgb_to_ansi256(color[0], color[1], color[2])
+        gradient_text += f"{fore(ansi_color)}{text[i % len(text)]}{style('reset')}"
+    return gradient_text
+
 def display_fontbees_name():
     """
-    Displays the company name "FontBees" in green color with a stylized format.
+    Displays the company name "FontBees" in a gradient color with a stylized format.
     """
-    print("\033[92m--==[ FontBees ]==--\033[0m")  # \033[92m is the ANSI escape code for green
+    text = figlet_format("FontBees", font="slant")
+    start_color = (0, 255, 0)  # Green
+    end_color = (0, 0, 255)    # Blue
+    steps = len(text)
+    gradient_text_output = gradient_text(text, start_color, end_color, steps)
+    print(gradient_text_output)
 
 def main():
     """
     Main function that runs the QR code generator tool.
     """
-    display_fontbees_name()  # Display "FontBees" when the tool is activated
+    display_fontbees_name()  # Display "FontBees" with gradient effect
 
     # Always ask for the URL
     url = input("Enter the URL to generate QR Code: ")
